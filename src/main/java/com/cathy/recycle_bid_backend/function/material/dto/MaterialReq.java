@@ -12,9 +12,6 @@ import lombok.Data;
 @Data
 public class MaterialReq {
 
-    @NotBlank(message = "品項編號 不得空白!!")
-    private String code;
-
     @NotBlank(message = "品項名稱 不得空白!!")
     private String name;
 
@@ -28,7 +25,6 @@ public class MaterialReq {
 
     public Material toEntity() {
         return Material.builder()
-                .code(StringUtils.trim(code))
                 .name(StringUtils.trim(name))
                 .category(StringUtils.trim(category))
                 .unit(StringUtils.trim(unit))
