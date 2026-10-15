@@ -32,4 +32,13 @@ public class MaterialReq {
                 .build();
     }
 
+    public Material applyto(Material entity) {
+        entity.setName(StringUtils.trim(name));
+        entity.setCategory(StringUtils.trim(category));
+        entity.setUnit(StringUtils.trim(unit));
+        entity.setEnabled(Objects.requireNonNullElse(enabled, true));
+        
+        return entity;
+    }
+
 }

@@ -1,6 +1,7 @@
 package com.cathy.recycle_bid_backend.function.material;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,7 +42,14 @@ public class MaterialService {
 
         Material entity = req.toEntity();
 
-        Material saved = materialRepository.save(entity);
+        String prefix = CATEGORY_PREFIX.get(entity.getCategory());
+        if (prefix == null) {
+            throw new BusinessException("尚未設定此分類的品項代碼前綴");
+        }
+
+        // flush 後才會取得 Hibernate 自動產生的建立時間。
+        Material saved = materialRepository.saveAndFlush(entity);
+        saved.setCode(prefix + "%03d".formatted(saved.getId()));
 
         return MaterialRes.of(saved);
     }
@@ -50,24 +58,32 @@ public class MaterialService {
     @Transactional
     public MaterialRes update(Long id, MaterialReq req) {
 
-        Material entity = findEntityById(id);
-
-        entity.setName(req.getName());
-        entity.setCategory(req.getCategory());
-        entity.setUnit(req.getUnit());
-        entity.setEnabled(req.getEnabled());
+        Material entity = req.applyto(findEntityById(id));
 
         Material saved = materialRepository.save(entity);
 
         return MaterialRes.of(saved);
     }
 
+    // 刪除
+    @Transactional
+    public void delete(Long id) {
+        Material entity = findEntityById(id);
 
+        materialRepository.delete(entity);
+    }
 
     // 共用：根據 ID 查詢 Entity
     private Material findEntityById(Long id) {
         return materialRepository.findById(id)
                 .orElseThrow(() -> new BusinessException("找不到此回收品項"));
     }
+
+    // 共用：根據分類取得對應的代碼前綴
+    private static final Map<String, String> CATEGORY_PREFIX = Map.of(
+            "金屬類", "MET",
+            "塑膠類", "PLS",
+            "玻璃類", "GLA",
+            "紙類", "PAP");
 
 }
