@@ -1,5 +1,6 @@
 package com.cathy.recycle_bid_backend.function.bid.dto;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -12,14 +13,17 @@ public class BidRes {
 
     private Long id;
     private String bidNo;
-    private String title;
-    private String companyName;
     private String contactName;
     private String contactPhone;
-    private LocalDate publishDate;
-    private LocalDate deadlineDate;
-    private String status;
-    private String note;
+    private String materialCode;
+    private String itemDescription;
+    private BigDecimal quantity;
+    private String unit;
+    private String pickupLocation;
+    private LocalDate quotationNoticeDate;
+    private LocalDate quotationDeadlineDate;
+    private String environmentalCode;
+    private String referenceStorageLocation;
     private LocalDateTime createdAt;
 
     // 將 Entity 轉成 API 回應資料
@@ -27,17 +31,19 @@ public class BidRes {
         BidRes res = new BidRes();
         res.setId(entity.getId());
         res.setBidNo(entity.getBidNo());
-        res.setTitle(entity.getTitle());
-        res.setCompanyName(entity.getCompanyName());
         res.setContactName(entity.getContactName());
         res.setContactPhone(entity.getContactPhone());
-        res.setPublishDate(entity.getPublishDate());
-        res.setDeadlineDate(entity.getDeadlineDate());
-        res.setStatus(entity.getStatus());
-        res.setNote(entity.getNote());
+        res.setMaterialCode(entity.getMaterialCode());
+        res.setItemDescription(entity.getItemDescription());
+        res.setQuantity(entity.getQuantity());
+        res.setUnit(entity.getUnit());
+        res.setPickupLocation(entity.getPickupLocation());
+        res.setQuotationNoticeDate(entity.getQuotationNoticeDate());
+        res.setQuotationDeadlineDate(entity.getQuotationDeadlineDate());
+        res.setEnvironmentalCode(entity.getEnvironmentalCode());
+        res.setReferenceStorageLocation(entity.getReferenceStorageLocation());
         res.setCreatedAt(entity.getCreatedAt());
 
         return res;
     }
-    
 }

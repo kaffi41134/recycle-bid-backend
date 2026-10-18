@@ -1,5 +1,6 @@
 package com.cathy.recycle_bid_backend.data.entity;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -28,35 +29,44 @@ public class Bid {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // 案件編號
+    // 標售案號
     private String bidNo;
-
-    // 案件名稱
-    private String title;
-
-    // 招標公司
-    private String companyName;
 
     // 聯絡人
     private String contactName;
 
-    // 聯絡電話
+    // 電話
     private String contactPhone;
 
-    // 公告日期
-    private LocalDate publishDate;
+    // 材料編號
+    private String materialCode;
 
-    // 投標截止日期
-    private LocalDate deadlineDate;
+    // 品名規格
+    private String itemDescription;
 
-    // 案件狀態，預設為準備中
-    @Builder.Default
-    private String status = "DRAFT";
+    // 數量
+    @Column(precision = 19, scale = 6)
+    private BigDecimal quantity;
 
-    // 備註
-    private String note;
+    // 單位
+    private String unit;
 
-     // 建立時間
+    // 提貨地點
+    private String pickupLocation;
+
+    // 報價通知日
+    private LocalDate quotationNoticeDate;
+
+    // 報價截止日
+    private LocalDate quotationDeadlineDate;
+
+    // 環保法定代碼
+    private String environmentalCode;
+
+    // 參考料位
+    private String referenceStorageLocation;
+
+    // 建立時間
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
