@@ -1,4 +1,3 @@
-
 package com.cathy.recycle_bid_backend.function.bid.dto;
 
 public record BidImportRes(
