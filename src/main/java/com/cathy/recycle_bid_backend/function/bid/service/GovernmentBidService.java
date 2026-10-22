@@ -1,5 +1,6 @@
 package com.cathy.recycle_bid_backend.function.bid.service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -19,11 +20,34 @@ public class GovernmentBidService {
 
     private final GovernmentBidRepository governmentBidRepository;
 
-    // 查詢全部
+    // 依建立日期查詢，未填日期時查詢全部
     @Transactional(readOnly = true)
-    public List<GovernmentBidRes> findAll() {
-        return governmentBidRepository.findAll()
-                .stream()
+    public List<GovernmentBidRes> findAll(LocalDate createdDateFrom, LocalDate createdDateTo) {
+        if (createdDateFrom != null && createdDateTo != null && createdDateFrom.isAfter(createdDateTo)) {
+            throw new BusinessException("建立日期起日不可晚於迄日");
+        }
+        if (LocalDate.MAX.equals(createdDateTo)) {
+            throw new BusinessException("建立日期迄日超出可查詢範圍");
+        }
+        List<GovernmentBid> bids;
+
+        if (createdDateFrom != null && createdDateTo != null) {
+            // 起訖都有填
+            bids = governmentBidRepository.findByCreatedAtGreaterThanEqualAndCreatedAtLessThan(
+                    createdDateFrom.atStartOfDay(),
+                    createdDateTo.plusDays(1).atStartOfDay());
+        } else if (createdDateFrom != null) {
+            // 只填起日
+            bids = governmentBidRepository.findByCreatedAtGreaterThanEqual(createdDateFrom.atStartOfDay());
+        } else if (createdDateTo != null) {
+            // 只填迄日，包含當天整天
+            bids = governmentBidRepository.findByCreatedAtLessThan(createdDateTo.plusDays(1).atStartOfDay());
+        } else {
+            // 都沒填
+            bids = governmentBidRepository.findAll();
+        }
+
+        return bids.stream()
                 .map(GovernmentBidRes::of)
                 .toList();
     }
