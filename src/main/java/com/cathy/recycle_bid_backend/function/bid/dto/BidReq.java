@@ -9,6 +9,8 @@ import com.cathy.recycle_bid_backend.data.entity.Bid;
 
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Digits;
 import lombok.Data;
 
 @Data
@@ -25,9 +27,17 @@ public class BidReq {
 
     private String itemDescription;
 
+    @DecimalMin(value = "0", message = "數量不得小於零")
+    @Digits(integer = 13, fraction = 6, message = "數量最多 13 位整數及 6 位小數")
     private BigDecimal quantity;
 
     private String unit;
+
+    @DecimalMin(value = "0", message = "決標金額不得小於零")
+    @Digits(integer = 17, fraction = 2, message = "決標金額最多 17 位整數及 2 位小數")
+    private BigDecimal awardAmount;
+
+    private LocalDate awardDate;
 
     private String pickupLocation;
 
@@ -58,6 +68,8 @@ public class BidReq {
                 .itemDescription(StringUtils.trimToNull(itemDescription))
                 .quantity(quantity)
                 .unit(StringUtils.trimToNull(unit))
+                .awardAmount(awardAmount)
+                .awardDate(awardDate)
                 .pickupLocation(StringUtils.trimToNull(pickupLocation))
                 .quotationNoticeDate(quotationNoticeDate)
                 .quotationDeadlineDate(quotationDeadlineDate)
@@ -75,6 +87,8 @@ public class BidReq {
         entity.setItemDescription(StringUtils.trimToNull(itemDescription));
         entity.setQuantity(quantity);
         entity.setUnit(StringUtils.trimToNull(unit));
+        entity.setAwardAmount(awardAmount);
+        entity.setAwardDate(awardDate);
         entity.setPickupLocation(StringUtils.trimToNull(pickupLocation));
         entity.setQuotationNoticeDate(quotationNoticeDate);
         entity.setQuotationDeadlineDate(quotationDeadlineDate);

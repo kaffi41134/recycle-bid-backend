@@ -51,6 +51,13 @@ public class Bid {
     // 單位
     private String unit;
 
+    // 決標金額
+    @Column(precision = 19, scale = 2)
+    private BigDecimal awardAmount;
+
+    // 決標日
+    private LocalDate awardDate;
+
     // 提貨地點
     private String pickupLocation;
 

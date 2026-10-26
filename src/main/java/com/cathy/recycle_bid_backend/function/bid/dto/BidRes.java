@@ -19,6 +19,8 @@ public class BidRes {
     private String itemDescription;
     private BigDecimal quantity;
     private String unit;
+    private BigDecimal awardAmount;
+    private LocalDate awardDate;
     private String pickupLocation;
     private LocalDate quotationNoticeDate;
     private LocalDate quotationDeadlineDate;
@@ -37,6 +39,8 @@ public class BidRes {
         res.setItemDescription(entity.getItemDescription());
         res.setQuantity(entity.getQuantity());
         res.setUnit(entity.getUnit());
+        res.setAwardAmount(entity.getAwardAmount());
+        res.setAwardDate(entity.getAwardDate());
         res.setPickupLocation(entity.getPickupLocation());
         res.setQuotationNoticeDate(entity.getQuotationNoticeDate());
         res.setQuotationDeadlineDate(entity.getQuotationDeadlineDate());
