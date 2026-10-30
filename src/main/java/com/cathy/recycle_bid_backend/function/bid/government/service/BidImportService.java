@@ -1,24 +1,42 @@
-package com.cathy.recycle_bid_backend.function.bid.service;
+package com.cathy.recycle_bid_backend.function.bid.government.service;
 
+import java.io.UncheckedIOException;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
+import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClient;
+import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.RestClientResponseException;
 
 import com.cathy.recycle_bid_backend.exception.BusinessException;
-import com.cathy.recycle_bid_backend.function.bid.dto.BidDetailReq;
-import com.cathy.recycle_bid_backend.function.bid.dto.BidImportRes;
-import com.cathy.recycle_bid_backend.function.bid.dto.BidNoticeReq;
-import com.cathy.recycle_bid_backend.function.bid.dto.BidNoticeRes;
+import com.cathy.recycle_bid_backend.function.bid.government.dto.BidDetailReq;
+import com.cathy.recycle_bid_backend.function.bid.government.dto.BidImportRes;
+import com.cathy.recycle_bid_backend.function.bid.government.dto.BidNoticeReq;
+import com.cathy.recycle_bid_backend.function.bid.government.dto.BidNoticeRes;
 
 import tools.jackson.databind.JsonNode;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 public class BidImportService {
 
-    private final RestClient restClient = RestClient.create("https://pcc-api.openfun.app");
+    // 查詢時才建立 client，避免初始化失敗阻止後端啟動。
+    private RestClient createRestClient() {
+        var factory = new SimpleClientHttpRequestFactory();
+        factory.setConnectTimeout(Duration.ofSeconds(5));
+        factory.setReadTimeout(Duration.ofSeconds(15));
+
+        return RestClient.builder()
+                .baseUrl("https://pcc-api.openfun.app")
+                .requestFactory(factory)
+                .build();
+    }
 
     // 查詢公告清單
     public List<BidNoticeRes> findNotices(BidNoticeReq req) {
@@ -107,14 +125,28 @@ public class BidImportService {
 
     // 共用：取得並驗證標案公告資料
     private JsonNode getTenderData(String unitId, String jobNumber) {
-        JsonNode root = restClient.get()
-                .uri(uriBuilder -> uriBuilder
-                        .path("/api/tender")
-                        .queryParam("unit_id", unitId)
-                        .queryParam("job_number", jobNumber)
-                        .build())
-                .retrieve()
-                .body(JsonNode.class);
+        JsonNode root;
+
+        try {
+            RestClient client = createRestClient();
+            root = client.get()
+                    .uri(uriBuilder -> uriBuilder
+                            .path("/api/tender")
+                            .queryParam("unit_id", unitId)
+                            .queryParam("job_number", jobNumber)
+                            .build())
+                    .retrieve()
+                    .body(JsonNode.class);
+        } catch (ResourceAccessException e) {
+            log.warn("外部標案 API 連線失敗或逾時", e);
+            throw new BusinessException("外部標案服務連線失敗或等待逾時，請稍後再試");
+        } catch (RestClientResponseException e) {
+            log.warn("外部標案 API 回傳錯誤，狀態碼：{}", e.getStatusCode(), e);
+            throw new BusinessException("外部標案服務暫時無法提供資料，請稍後再試");
+        } catch (RestClientException | UncheckedIOException e) {
+            log.error("外部標案 API 請求或資料解析失敗", e);
+            throw new BusinessException("無法讀取外部標案資料，請稍後再試");
+        }
 
         if (root == null || !root.path("records").isArray()) {
             throw new BusinessException("無法取得標案公告資料");

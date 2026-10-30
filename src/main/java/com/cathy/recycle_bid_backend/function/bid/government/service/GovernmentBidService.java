@@ -1,4 +1,4 @@
-package com.cathy.recycle_bid_backend.function.bid.service;
+package com.cathy.recycle_bid_backend.function.bid.government.service;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -9,8 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.cathy.recycle_bid_backend.data.dao.GovernmentBidRepository;
 import com.cathy.recycle_bid_backend.data.entity.GovernmentBid;
 import com.cathy.recycle_bid_backend.exception.BusinessException;
-import com.cathy.recycle_bid_backend.function.bid.dto.GovernmentBidReq;
-import com.cathy.recycle_bid_backend.function.bid.dto.GovernmentBidRes;
+import com.cathy.recycle_bid_backend.function.bid.government.dto.GovernmentBidReq;
+import com.cathy.recycle_bid_backend.function.bid.government.dto.GovernmentBidRes;
 
 import lombok.RequiredArgsConstructor;
 

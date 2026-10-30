@@ -1,4 +1,4 @@
-package com.cathy.recycle_bid_backend.function.bid.dto;
+package com.cathy.recycle_bid_backend.function.bid.government.dto;
 
 public record BidImportRes(
 

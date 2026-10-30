@@ -1,10 +1,10 @@
-package com.cathy.recycle_bid_backend.function.bid.controller;
+package com.cathy.recycle_bid_backend.function.bid.government.controller;
 
-import com.cathy.recycle_bid_backend.function.bid.dto.BidDetailReq;
-import com.cathy.recycle_bid_backend.function.bid.dto.BidImportRes;
-import com.cathy.recycle_bid_backend.function.bid.dto.BidNoticeReq;
-import com.cathy.recycle_bid_backend.function.bid.dto.BidNoticeRes;
-import com.cathy.recycle_bid_backend.function.bid.service.BidImportService;
+import com.cathy.recycle_bid_backend.function.bid.government.dto.BidDetailReq;
+import com.cathy.recycle_bid_backend.function.bid.government.dto.BidImportRes;
+import com.cathy.recycle_bid_backend.function.bid.government.dto.BidNoticeReq;
+import com.cathy.recycle_bid_backend.function.bid.government.dto.BidNoticeRes;
+import com.cathy.recycle_bid_backend.function.bid.government.service.BidImportService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

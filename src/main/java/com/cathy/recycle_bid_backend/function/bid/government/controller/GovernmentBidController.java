@@ -1,4 +1,4 @@
-package com.cathy.recycle_bid_backend.function.bid.controller;
+package com.cathy.recycle_bid_backend.function.bid.government.controller;
 
 import java.util.List;
 import java.time.LocalDate;
@@ -18,9 +18,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
-import com.cathy.recycle_bid_backend.function.bid.dto.GovernmentBidReq;
-import com.cathy.recycle_bid_backend.function.bid.dto.GovernmentBidRes;
-import com.cathy.recycle_bid_backend.function.bid.service.GovernmentBidService;
+import com.cathy.recycle_bid_backend.function.bid.government.dto.GovernmentBidReq;
+import com.cathy.recycle_bid_backend.function.bid.government.dto.GovernmentBidRes;
+import com.cathy.recycle_bid_backend.function.bid.government.service.GovernmentBidService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
